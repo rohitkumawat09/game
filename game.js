@@ -20,25 +20,68 @@ avatars.forEach(avatar => {
   avatar.addEventListener("click", () => {
     avatars.forEach(av => av.classList.remove("selected"));
     avatar.classList.add("selected");
+    selectedAvatarSrc = avatar.querySelector("img").src; 
     screen2.classList.add("gayab");
     screen3.classList.remove("gayab");
+
     startTimer();
   });
 });
 
 function startTimer() {
+  score = 0;
+  timeLeft = 6;
+  scoreElement.innerText = score;
   timerElement.textContent = timeLeft;
+  imagesArea.innerHTML = ""; 
+
+ 
   timerInterval = setInterval(() => {
+    timeLeft--;
+    timerElement.textContent = timeLeft;
+
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
       alert(`Time's up! Your score is ${score}`);
       resetGame();
-    } else {
-      timerElement.textContent = timeLeft;
-      timeLeft--;
     }
-  },   1000);
+  }, 1000);
+  setInterval(generateRandomImages, 1000);
+
 }
+
+
+function   generateRandomImages(){
+  if (!selectedAvatarSrc) return;
+
+  const img = document.createElement("img");
+  img.src = selectedAvatarSrc;
+  img.addEventListener("click", () => {
+    score += 1;
+    scoreElement.innerText = score;
+    img.remove();
+  });
+
+  imagesArea.appendChild(img);
+
+console.log(selectedAvatarSrc);
+
+}
+
+
+function resetGame() {
+  clearInterval(timerInterval);
+  imagesArea.innerHTML = "";
+  score = 0;
+  timeLeft = 60;
+  scoreElement.innerText = score;
+  timerElement.textContent = timeLeft;
+  screen3.classList.add("gayab");
+  screen1.classList.remove("gayab");
+}
+
+ 
+
 
 
 
